@@ -97,18 +97,19 @@
                          nullptr,
                          &ife->wrapper_);
 
-
       assert(status == napi_ok);
 
-      return This;
-    } else {
-      napi_value undefined_obj;
-
-      status = napi_get_undefined(env, &undefined_obj);
-      assert(status == napi_ok);
-
-      return undefined_obj;
+      if (if_initialize() == 0) {
+        return This;
+      }
     }
+
+    napi_value undefined_obj;
+
+    status = napi_get_undefined(env, &undefined_obj);
+    assert(status == napi_ok);
+
+    return undefined_obj;
   }
 
   /**
@@ -134,9 +135,10 @@
       return undefined_obj;
     }
 
+    status = napi_create_object(env, &obj);
+    assert(status == napi_ok);
 
     for (i = 0; i < cnt; i++) {
-
       char ipStr[32], macStr[20];
       unsigned char *m;
 
@@ -146,18 +148,15 @@
         snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
                 m[0], m[1], m[2], m[3], m[4], m[5]);
 
-        status = napi_create_object(env, &obj);
-        assert(status == napi_ok);
-
         status = napi_create_string_utf8(env, macStr, sizeof(mac), &mac);
         assert(status == napi_ok);
 
         status = napi_set_named_property(env, obj, ipStr, mac);
         assert(status == napi_ok);
-
-        return obj;
       }
     }
+
+    return obj;
   }
 
   /**
@@ -291,7 +290,7 @@
       return nullptr;
     }
 
-    status = napi_get_value_string_utf8(env, nName, NULL, NULL, &nameCopiedBytes);
+    status = napi_get_value_string_utf8(env, nName, NULL, 0, &nameCopiedBytes);
     assert(status == napi_ok);
 
     char           name[nameCopiedBytes + 1];
@@ -369,10 +368,8 @@
       return nullptr;
     }
 
-    int32_t    success;
+    int32_t    success = 1;
     napi_value nSuccess;
-
-    success = 1;
 
     if (if_up(&iface)) {
       char *error = if_error();
@@ -414,7 +411,7 @@
 
     size_t ipBytesCopied;
 
-    status = napi_get_value_string_utf8(env, args[0], NULL, NULL, &ipBytesCopied);
+    status = napi_get_value_string_utf8(env, args[0], NULL, 0, &ipBytesCopied);
     assert(status == napi_ok);
 
     char ip[ipBytesCopied + 1];
@@ -442,10 +439,10 @@
       }
     }
 
-    int32_t    success;
+    int32_t    success = 1;
     napi_value nSuccess;
 
-    if (success = if_down(&iface)) {
+    if (if_down(&iface)) {
       char *error = if_error();
 
       napi_throw_error(env, nullptr, (const char*) error);
@@ -625,7 +622,7 @@
         status = napi_typeof(env, args[2], &doPingType);
         assert(status == napi_ok);
 
-        if (doPingType != napi_ok) {
+        if (doPingType != napi_boolean) {
           napi_throw_type_error(env, nullptr, "Third Argument must be a Boolean");
           return nullptr;
         }

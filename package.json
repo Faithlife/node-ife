@@ -1,5 +1,5 @@
 {
-  "name": "@nodeos/node-ife",
+  "name": "@faithlife/node-ife",
   "description": "Interface Management for Node.js/NodeOS",
   "keywords": [
     "ife",
@@ -7,9 +7,9 @@
     "ipconfig"
   ],
   "scripts": {
-    "install": "prebuild-install || node-gyp rebuild"
+    "install": "node-gyp rebuild"
   },
-  "version": "0.0.12",
+  "version": "0.0.13",
   "preferGlobal": true,
   "author": {
     "name": "Theo Schlossnagle"
@@ -19,22 +19,23 @@
       "email": "philipp.czarnetzki@protonmail.ch",
       "name": "Philipp Czarnetzki",
       "url": "https://github.com/luii"
+    },
+    {
+      "email": "martin.potter@faithlife.com",
+      "name": "Martin Potter",
+      "url": "https://github.com/martinpotter"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/luii/node-ife.git"
+    "url": "git://github.com/faithlife/node-ife.git"
   },
   "bugs": {
-    "url": "http://github.com/luii/node-ife/issues"
+    "url": "http://github.com/faithlife/node-ife/issues"
   },
   "main": "./index",
   "engines": {
     "node": "9.2.0"
-  },
-  "dependencies": {
-    "bindings": "1.3.0",
-    "prebuild-install": "^2.4.1"
   },
   "licenses": [
     {

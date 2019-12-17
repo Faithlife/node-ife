@@ -14,6 +14,20 @@
                 }
             ]
         }],
+        ['OS=="solaris"', {
+            'targets': [
+                {
+                    'target_name': 'IFEBinding',
+                    'sources': [
+                        'addon.cc',
+                        'ife.cc',
+                        'ife-icmp-support.cc',
+                        'ife-dlpi.cc',
+                        'arpcache-dlpi.cc'
+                    ],
+                }
+            ]
+        }],
         ['1==1', {
             'targets': [ 
                 {

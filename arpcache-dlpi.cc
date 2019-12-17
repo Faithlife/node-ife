@@ -31,11 +31,34 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <inet/mib2.h>
 #include <sys/stream.h>
 #include <stropts.h>
 #include <sys/strstat.h>
 #include <sys/tihdr.h>
+
+typedef uint32_t Gauge;
+/* definition taken from older copy of <inet/mib2.h> */
+struct tcpConnEntryInfo_s {
+        /* seq # of next segment to send */
+        Gauge           ce_snxt;
+                        /* seq # of of last segment unacknowledged */
+        Gauge           ce_suna;
+                        /* currect send window size */
+        Gauge           ce_swnd;
+                        /* seq # of next expected segment */
+        Gauge           ce_rnxt;
+                        /* seq # of last ack'd segment */
+        Gauge           ce_rack;
+                        /* currenct receive window size */
+        Gauge           ce_rwnd;
+                                /* current rto (retransmit timeout) */
+        Gauge           ce_rto;
+                                /* current max segment size */
+        Gauge           ce_mss;
+                        /* actual internal state */
+        int             ce_state;
+};
+#include <inet/mib2.h>
 
 static int arpcache_psize = 0;
 static arp_entry *arpcache_private = NULL;
